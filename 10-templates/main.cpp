@@ -4,16 +4,50 @@
 
 using namespace std;
 
-void ReadMatrix(double **matrix, int num_rows, int num_cols, ifstream &fin);
-void PrintMatrix(double **matrix, int num_rows, int num_cols);
-void DeleteRows(double **matrix, int &num_rows, int num_cols);
-void DeleteCols(double **matrix, int num_rows, int &num_cols);
-int FindFirstPosRow(double **matrix, int num_rows, int num_cols);
+template <class T>
+void ReadMatrix(T **matrix, int num_rows, int num_cols, ifstream &fin);
+
+template <class T>
+void PrintMatrix(T **matrix, int num_rows, int num_cols);
+
+template <class T>
+void DeleteRows(T **matrix, int &num_rows, int num_cols);
+
+template <class T>
+void DeleteCols(T **matrix, int num_rows, int &num_cols);
+
+template <class T>
+int FindFirstPosRow(T **matrix, int num_rows, int num_cols);
+
+template <class T>
+int Execute(string file_name);
 
 int main() {
-    string file_name;
-    cout << "Enter file name: ";
-    cin >> file_name;
+    while (true) {
+        string type;
+        cout << "Select type (1 - int, 2 - float, 3 - double, e - to close): ";
+        cin >> type;
+
+        if (type == "e") {
+            return 0;
+        }
+        else if (type == "1") {
+            Execute<int>("int.txt");
+        }
+        else if (type == "2") {
+            Execute<float>("float.txt");
+        }
+        else if (type == "3") {
+            Execute<double>("double.txt");
+        }
+        else {
+            cout << "\nERROR... Enter correct character...\n\n";
+        }
+    }
+}
+
+template <class T>
+int Execute(string file_name) {
     ifstream fin(file_name);
     if (!fin.is_open()) {
         cout << "ERROR!!! Can't open file: " << file_name << endl;
@@ -24,9 +58,9 @@ int main() {
     fin >> num_rows;
     fin >> num_cols;
 
-    double **matrix = new double*[num_rows];
+    T **matrix = new T*[num_rows];
     for (int i = 0; i < num_rows; i++)
-        matrix[i] = new double[num_cols];
+        matrix[i] = new T[num_cols];
 
     ReadMatrix(matrix, num_rows, num_cols, fin);
     fin.close();
@@ -48,19 +82,24 @@ int main() {
         cout << "\nArray doesn't have any positive elements...";
     }
     cout << endl;
+    cout << endl;
 
     for (int i = 0; i < num_rows; i++)
         delete[] matrix[i];
     delete[] matrix;
+
+    return 0;
 }
 
-void ReadMatrix(double **matrix, int num_rows, int num_cols, ifstream &fin) {
+template <class T>
+void ReadMatrix(T **matrix, int num_rows, int num_cols, ifstream &fin) {
     for (int i = 0; i < num_rows; i++)
         for (int j = 0; j < num_cols; j++)
             fin >> matrix[i][j];
 }
 
-void PrintMatrix(double **matrix, int num_rows, int num_cols) {
+template <class T>
+void PrintMatrix(T **matrix, int num_rows, int num_cols) {
     for (int i = 0; i < num_rows; i++) {
         for (int j = 0; j < num_cols; j++)
             cout << matrix[i][j] << "\t";
@@ -68,7 +107,8 @@ void PrintMatrix(double **matrix, int num_rows, int num_cols) {
     }
 }
 
-void DeleteRows(double **matrix, int &num_rows, int num_cols) {
+template <class T>
+void DeleteRows(T **matrix, int &num_rows, int num_cols) {
     int i = 0;
     while (i < num_rows) {
         // Проверяем строку на наличие отличных от нуля элементов
@@ -92,7 +132,8 @@ void DeleteRows(double **matrix, int &num_rows, int num_cols) {
     }
 }
 
-void DeleteCols(double **matrix, int num_rows, int &num_cols) {
+template <class T>
+void DeleteCols(T **matrix, int num_rows, int &num_cols) {
     int j = 0;
     while (j < num_cols) {
         // Проверяем столбец на наличие отличных от нуля элементов
@@ -117,7 +158,8 @@ void DeleteCols(double **matrix, int num_rows, int &num_cols) {
     }
 }
 
-int FindFirstPosRow(double **matrix, int num_rows, int num_cols) {
+template <class T>
+int FindFirstPosRow(T **matrix, int num_rows, int num_cols) {
     for (int i = 0; i < num_rows; i++)
         for (int j = 0; j < num_cols; j++)
             if (matrix[i][j] > 0)

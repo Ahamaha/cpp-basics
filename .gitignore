@@ -137,7 +137,6 @@ StyleCopReport.xml
 *.tlh
 *.tmp
 *.tmp_proj
-*_wpftmp.csproj
 *.log
 *.vspscc
 *.vssscc
@@ -352,8 +351,8 @@ paket-files/
 .idea/
 *.sln.iml
 
-# CodeRush personal settings
-.cr/personal
+# CodeRush
+.cr/
 
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
